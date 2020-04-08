@@ -4,7 +4,7 @@
 # @Date:   2018-09-05
 # @Filename: setup.py
 # @Last modified by:   archer
-# @Last modified time: 2020-04-08T14:29:09+01:00
+# @Last modified time: 2020-04-08T14:39:26+01:00
 # @License: Please see LICENSE file in project root
 
 import subprocess
@@ -23,7 +23,7 @@ version_git = version_num.decode("ascii").strip()
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
-with open("README.md", "r") as fh:
+with open("README.rst", "r") as fh:
     readme = fh.read()
 
 setup(
@@ -35,6 +35,6 @@ setup(
     author="George Onoufriou",
     url="https://github.com/DreamingRaven/python-ezdb",
     packages=find_namespace_packages(),
-    scripts=['pyrtd'],
+    scripts=[],
     install_requires=requirements
 )
