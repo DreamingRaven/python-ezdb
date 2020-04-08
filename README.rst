@@ -1,8 +1,8 @@
-Python-ReadTheDocs Template
-###########################
+python-ezdb
+###########
 
 Please read the docs:
 
-.. image:: https://readthedocs.org/projects/pyrtd/badge/?version=latest
-  :target: https://pyrtd.readthedocs.io/en/latest/?badge=latest
-  :alt: Documentation Status,
+.. image:: https://readthedocs.org/projects/python-ezdb/badge/?version=latest
+  :target: https://python-ezdb.readthedocs.io/en/latest/?badge=latest
+  :alt: Documentation Status and link,
