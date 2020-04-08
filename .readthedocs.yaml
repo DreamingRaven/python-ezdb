@@ -1,3 +1,9 @@
+# @Author: GeorgeRaven <archer>
+# @Date:   2020-04-08T12:34:43+01:00
+# @Last modified by:   archer
+# @Last modified time: 2020-04-08T14:07:31+01:00
+# @License: please see LICENSE file in project root
+
 # .readthedocs.yml
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
@@ -21,6 +27,6 @@ formats: all
 
 # Optionally set the version of Python and requirements required to build your docs
 python:
-  version: 3.7
+  version: 3.8
   install:
     - requirements: docs/requirements.txt
