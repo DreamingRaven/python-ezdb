@@ -3,7 +3,7 @@
 # @Email:  george raven community at pm dot me
 # @Filename: conf.py
 # @Last modified by:   archer
-# @Last modified time: 2019-08-05T18:33:03+01:00
+# @Last modified time: 2020-04-08T14:11:51+01:00
 # @License: Please see LICENSE in project root
 
 
@@ -45,8 +45,8 @@ print("sys path:", sys.path)
 
 # -- Project information -----------------------------------------------------
 
-project = 'pyrtd'
-copyright = '2019, George Onoufriou (GeorgeRaven, archer, DreamingRaven)'
+project = 'python-ezdb'
+copyright = '2020, George Onoufriou (GeorgeRaven, archer, DreamingRaven)'
 author = 'GeorgeRaven'
 master_doc = 'index'
 

@@ -11,4 +11,4 @@ pyrtd
   :caption: Table of Contents
   :numbered:
 
-  usage
+  mongo
