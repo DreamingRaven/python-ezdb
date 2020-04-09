@@ -5,7 +5,7 @@
 # @Email:  george raven community at pm dot me
 # @Filename: ezdb.py
 # @Last modified by:   archer
-# @Last modified time: 2020-04-09T20:19:04+01:00
+# @Last modified time: 2020-04-09T20:47:27+01:00
 # @License: Please see LICENSE in project root
 
 from __future__ import print_function, absolute_import   # python 2-3 compat
@@ -62,7 +62,7 @@ class Mongo(object):
             "db_batch_size": 32,
             "pylog": logger if logger is not None else print,
             "db": None,
-            "db_pipeline": None,
+            "db_pipeline": [],
             "gfs": None,
             # replica options section
             "db_replica_set_name": None,
@@ -540,6 +540,7 @@ class Mongo(object):
         """
         db_pipeline = db_pipeline if db_pipeline is not None else \
             self.args["db_pipeline"]
+        db_pipeline = db_pipeline if db_pipeline is not None else []
         db_collection_name = db_collection_name if db_collection_name is not \
             None else self.args["db_collection_name"]
         db = db if db is not None else self.args["db"]
@@ -772,10 +773,15 @@ class Mongo_tests(unittest.TestCase):
             self.shutil.rmtree(self.db_path)
         self.assertFalse(os.path.isdir(self.db_path))
 
-    def test_init(self):
+    def test_dump(self):
         db = Mongo({"pylog": null_printer})
-        db.debug()
         self.assertIsInstance(db, Mongo)
+        db.connect()
+        db.dump(db_collection_name="test", data={"success": 1})
+        cursor = db.getCursor(db_collection_name="test")
+        for batch in db.getBatches(db_data_cursor=cursor):
+            for doc in batch:
+                self.assertEqual(doc["success"], 1)
 
 
 def null_printer(*text, log_min_level=None,
