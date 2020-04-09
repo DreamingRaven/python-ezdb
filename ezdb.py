@@ -5,7 +5,7 @@
 # @Email:  george raven community at pm dot me
 # @Filename: ezdb.py
 # @Last modified by:   archer
-# @Last modified time: 2020-04-09T20:47:27+01:00
+# @Last modified time: 2020-04-09T20:51:27+01:00
 # @License: Please see LICENSE in project root
 
 from __future__ import print_function, absolute_import   # python 2-3 compat
@@ -780,6 +780,7 @@ class Mongo_tests(unittest.TestCase):
         db.dump(db_collection_name="test", data={"success": 1})
         cursor = db.getCursor(db_collection_name="test")
         for batch in db.getBatches(db_data_cursor=cursor):
+            self.assertEqual(len(batch), 1)
             for doc in batch:
                 self.assertEqual(doc["success"], 1)
 
