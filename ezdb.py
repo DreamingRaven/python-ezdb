@@ -5,7 +5,7 @@
 # @Email:  george raven community at pm dot me
 # @Filename: ezdb.py
 # @Last modified by:   archer
-# @Last modified time: 2020-04-09T09:49:42+01:00
+# @Last modified time: 2020-04-09T20:19:04+01:00
 # @License: Please see LICENSE in project root
 
 from __future__ import print_function, absolute_import   # python 2-3 compat
@@ -752,18 +752,25 @@ def _mongo_unit_test():
 
 class Mongo_tests(unittest.TestCase):
     """Unit test class aggregating all tests for the Mongo class"""
+    import shutil
 
     def setUp(self):
         """Predefined setUp function for preparing tests, in our case
         creating the database."""
         self.db_path = "./unit_test_db"
-        db = Mongo({"pylog": null_printer, "db_path": self.db_path,
-                    "db_log_path": self.db_path})
+        self.db = Mongo({"pylog": null_printer, "db_path": self.db_path,
+                         "db_log_path": self.db_path})
+        self.db.init()
+        self.db.start()
+        self.assertTrue(os.path.isdir(self.db_path))
 
     def tearDown(self):
         """Predefined tearDown function for cleaning up after tests,
         in our case deleting any generated db files."""
-        pass
+        self.db.stop()
+        if(self.db_path is not None):
+            self.shutil.rmtree(self.db_path)
+        self.assertFalse(os.path.isdir(self.db_path))
 
     def test_init(self):
         db = Mongo({"pylog": null_printer})
