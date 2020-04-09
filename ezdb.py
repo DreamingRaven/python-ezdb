@@ -5,7 +5,7 @@
 # @Email:  george raven community at pm dot me
 # @Filename: ezdb.py
 # @Last modified by:   archer
-# @Last modified time: 2020-04-08T14:19:00+01:00
+# @Last modified time: 2020-04-09T09:27:40+01:00
 # @License: Please see LICENSE in project root
 
 from __future__ import print_function, absolute_import   # python 2-3 compat
@@ -15,6 +15,7 @@ import time
 from pymongo import MongoClient, errors, database, command_cursor
 import gridfs
 import re
+import unittest
 
 
 class Mongo(object):
@@ -749,5 +750,21 @@ def _mongo_unit_test():
     db.stop()
 
 
-if(__name__ == "__main__"):
-    _mongo_unit_test()
+class Mongo_tests(unittest.TestCase):
+    """Unit test class aggregating all tests for the Mongo class"""
+
+    def test_init(self):
+        db = Mongo({"pylog": null_printer})
+        db.debug()
+        self.assertIsInstance(db, Mongo)
+
+
+def null_printer(*text, log_min_level=None,
+                 log_delimiter=None):
+    # do absoluteley nothing, i.e dont print
+    pass
+
+
+if __name__ == "__main__":
+    # run all the unit-tests
+    unittest.main()
