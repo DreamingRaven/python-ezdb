@@ -36,7 +36,7 @@ setup(
     long_description_content_type="text/markdown",
     author="George Onoufriou",
     url="https://github.com/DreamingRaven/python-ezdb",
-    packages=find_namespace_packages(),
+    packages=find_namespace_packages(exclude="docs"),
     scripts=[],
     install_requires=requirements
 )
