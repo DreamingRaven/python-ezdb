@@ -26,7 +26,8 @@ with open('requirements.txt') as f:
 with open("README.rst", "r") as fh:
     readme = fh.read()
 
-print("\npackages: **********************************\n", find_namespace_packages(), "\n")
+namespace_packages = find_namespace_packages(exclude="docs")
+print("namespace packages:", namespace_packages)
 
 setup(
     name="python-ezdb",
@@ -36,7 +37,7 @@ setup(
     long_description_content_type="text/markdown",
     author="George Onoufriou",
     url="https://github.com/DreamingRaven/python-ezdb",
-    packages=find_namespace_packages(exclude="docs"),
+    packages=namespace_packages,
     scripts=[],
     install_requires=requirements
 )
