@@ -26,6 +26,8 @@ with open('requirements.txt') as f:
 with open("README.rst", "r") as fh:
     readme = fh.read()
 
+print("\npackages: **********************************\n", find_namespace_packages(), "\n")
+
 setup(
     name="python-ezdb",
     version=str(version_git),
