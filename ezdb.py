@@ -8,7 +8,7 @@
 # @Last modified time: 2020-04-09T20:51:27+01:00
 # @License: Please see LICENSE in project root
 
-from __future__ import print_function, absolute_import   # python 2-3 compat
+# from __future__ import print_function, absolute_import   # python 2-3 compat
 import os
 import subprocess
 import time
