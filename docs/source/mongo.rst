@@ -20,7 +20,7 @@ Setting up a basic database, and initializing it with a user.
 .. literalinclude:: ../../ezdb.py
     :pyobject: Mongo_tests.setUp
 
-Dumping and retrieving from the database using normal mongodb requests.
+Connecting to and dumping data to a database using normal mongodb requests.
 
 .. literalinclude:: ../../ezdb.py
     :pyobject: Mongo_tests.test_dump
