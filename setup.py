@@ -26,7 +26,7 @@ with open('requirements.txt') as f:
 with open("README.rst", "r") as fh:
     readme = fh.read()
 
-namespace_packages = find_namespace_packages(exclude="docs")
+namespace_packages = find_namespace_packages(exclude="docs.*")
 print("namespace packages:", namespace_packages)
 
 setup(
