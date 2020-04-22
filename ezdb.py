@@ -8,7 +8,7 @@
 # @Last modified time: 2020-04-09T20:51:27+01:00
 # @License: Please see LICENSE in project root
 
-from __future__ import print_function, absolute_import   # python 2-3 compat
+# from __future__ import print_function, absolute_import   # python 2-3 compat
 import os
 import subprocess
 import time
@@ -177,6 +177,7 @@ class Mongo(object):
         :param db_replica_read_preference: What rep type to prefer reads from.
         :param db_replica_max_staleness: Max seconds behind is replica allowed.
         :param db_tls: use TLS for db connection.
+        :param db_tls_ca_file: Certificate authority file path.
         :param db_tls_certificate_key_file: Certificate and key file for tls.
         :param db_tls_certificate_key_file_password: Cert and key file pass.
         :param db_tls_crl_file: Certificate revocation list file path.
@@ -191,6 +192,7 @@ class Mongo(object):
         :type db_replica_read_preference: string
         :type db_replica_max_staleness: string
         :type db_tls: bool
+        :type db_tls_ca_file: string
         :type db_tls_certificate_key_file: string
         :type db_tls_certificate_key_file_password: string
         :type db_tls_crl_file: string
