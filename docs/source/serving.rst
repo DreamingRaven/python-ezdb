@@ -50,7 +50,7 @@
 Serving with |mongodb|_
 =======================
 
-|mongodb|_ is a object (bson/ json) based database system. Python-ezdb provides a nice higher level interface "|section_mongo|" by using |pymongo|_ and os commands to make managing |mongodb|_ easy.
+|mongodb|_ is an object based database system. Python-ezdb provides a nice higher level interface "|section_mongo|" by using |pymongo|_ and os commands to make managing |mongodb|_ more streamlined and less reliant on direct donnection management to |mongodb|_.
 
 Further Reading
 +++++++++++++++
