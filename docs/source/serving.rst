@@ -34,6 +34,7 @@
 .. |ckfile| replace:: ``ckfile.pem``
 
 .. |troubleshooting| replace:: :ref:`section_ts_mongodb`
+.. |section_mongo| replace:: :ref:`section_mongo`
 
 .. |hostname| replace:: ``hostname``
 .. |port| replace:: ``port``
@@ -46,5 +47,10 @@
 
 .. _page_serving:
 
-Serving with MongoDB
-====================
+Serving with |mongodb|_
+=======================
+
+|mongodb|_ is a object (bson/ json) based database system. Python-ezdb provides a nice higher level interface "|section_mongo|" by using |pymongo|_ and os commands to make managing |mongodb|_ easy.
+
+Further Reading
++++++++++++++++
