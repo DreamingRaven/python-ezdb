@@ -12,6 +12,7 @@
 import os
 import subprocess
 import time
+import copy
 from pymongo import MongoClient, errors, database, command_cursor
 import gridfs
 import re
@@ -513,7 +514,8 @@ class Mongo(object):
                             "db": database.Database, "return": None}
 
     def _mergeDicts(self, *dicts):
-        """Given multiple dictionaries, merge together in order."""
+        """Given multiple dictionaries, deep copy, merge together in order."""
+        dicts = copy.deepcopy(dicts)
         result = {}
         for dictionary in dicts:
             result.update(dictionary)  # merge each dictionary in order
