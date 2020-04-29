@@ -6,7 +6,7 @@
 # Maintainer: George Raven <GeorgeRavenCommunity AT pm dot me>
 pkgname=python-ezdb-git
 _pkgsrcname="python-ezdb"
-pkgver=0.0.0.r28.d44c575
+pkgver=0.0.0.r30.fd13a26
 pkgrel=1
 pkgdesc="Ezified python mongodb database."
 arch=('x86_64' 'aarch64')
@@ -43,6 +43,7 @@ prepare() {
 
 build() {
 	cd "${srcdir}/${_pkgsrcname}"
+
 }
 
 check() {
@@ -53,7 +54,9 @@ check() {
 package() {
 	cd "${srcdir}/${_pkgsrcname}"
 	python3 ./setup.py install --prefix=/usr --root="$pkgdir/" --optimize=1
-	# ls $pkgdir/usr/lib/python*/site-packages/python-ezdb*
+	rm -r $pkgdir/usr/lib/python*/site-packages/docs
+	# echo "showing new removed"
+	# ls $pkgdir/usr/lib/python*/site-packages/
 	install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 	# install -Dm644 docs/build/man/python-ezdb.1 "$pkgdir/usr/share/man/man1/python-ezdb.1"
 }
