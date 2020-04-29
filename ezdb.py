@@ -616,7 +616,7 @@ class Mongo(object):
                                      db_data_cursor=db_data_cursor):
             gridout_list = list(map(
                 lambda doc: {"gridout": gfs.get(doc["_id"]),
-                             "_id": doc["_id"]}, batch))
+                             "_id": doc["_id"], "metadata": doc}, batch))
             # # equivalent for loop
             # gridout_list = []
             # for doc in batch:
@@ -785,6 +785,19 @@ class Mongo_tests(unittest.TestCase):
             self.assertEqual(len(batch), 1)
             for doc in batch:
                 self.assertEqual(doc["success"], 1)
+
+    def test_gridfs(self):
+        db = Mongo({"pylog": null_printer})
+        self.assertIsInstance(db, Mongo)
+        db.connect()
+        db.dump(db_collection_name="test", data=({"success": 1}, b'success'))
+        cursor = db.getCursor(db_collection_name="test.files")
+        for batch in db.getFiles(db_data_cursor=cursor):
+            for grid in batch:
+                # check ids match
+                self.assertEqual(grid["_id"], grid["metadata"]["_id"])
+                # read file and check is equal to what we put in
+                self.assertEqual(grid["gridout"].read(), b'success')
 
 
 def null_printer(*text, log_min_level=None,
