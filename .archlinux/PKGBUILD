@@ -6,12 +6,12 @@
 # Maintainer: George Raven <GeorgeRavenCommunity AT pm dot me>
 pkgname=python-ezdb-git
 _pkgsrcname="python-ezdb"
-pkgver=0.0.0.r19.110fb03
+pkgver=0.0.0.r28.d44c575
 pkgrel=1
 pkgdesc="Ezified python mongodb database."
 arch=('x86_64' 'aarch64')
 url="https://github.com/DreamingRaven/python-ezdb"
-_branch="master"
+_branch="dev"
 license=('MIT') # MIT is a special case store a copy in /usr/share/pkgname
 groups=()
 depends=('python-setuptools' 'python' 'python-pymongo')
@@ -47,12 +47,13 @@ build() {
 
 check() {
 	cd "${srcdir}/${_pkgsrcname}"
-	python3 ./ezdb.py
+	python3 ./unit_test.py
 }
 
 package() {
 	cd "${srcdir}/${_pkgsrcname}"
 	python3 ./setup.py install --prefix=/usr --root="$pkgdir/" --optimize=1
+	# ls $pkgdir/usr/lib/python*/site-packages/python-ezdb*
 	install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 	# install -Dm644 docs/build/man/python-ezdb.1 "$pkgdir/usr/share/man/man1/python-ezdb.1"
 }
