@@ -25,12 +25,17 @@ class Mongo_tests(unittest.TestCase):
         import os
         from ezdb.mongo import Mongo
 
-        self.db_path = "./unit_test_db"
-        self.db = Mongo({"pylog": null_printer, "db_path": self.db_path,
-                         "db_log_path": self.db_path})
-        self.db.init()
-        self.db.start()
-        self.assertTrue(os.path.isdir(self.db_path))
+        # the path and directory we want to use to store the database files
+        db_path = "./unit_test_db"
+        db = Mongo({"pylog": null_printer, "db_path": db_path,
+                    "db_log_path": db_path})
+        # initialise the database files and create a basic user
+        db.init()
+        # start the database with authenticaton
+        db.start()
+
+        # for tests only to check db directory is created
+        self.assertTrue(os.path.isdir(db_path))
 
     def tearDown(self):
         """Predefined tearDown function for cleaning up after tests,
@@ -39,10 +44,15 @@ class Mongo_tests(unittest.TestCase):
         import shutil
         from ezdb.mongo import Mongo
 
-        self.db.stop()
-        if(self.db_path is not None):
-            shutil.rmtree(self.db_path)
-        self.assertFalse(os.path.isdir(self.db_path))
+        db_path = "./unit_test_db"
+        db = Mongo({"pylog": null_printer, "db_path": db_path,
+                    "db_log_path": db_path})
+        db.stop()
+        if(db_path is not None):
+            shutil.rmtree(db_path)
+
+        # for tests only to check db directory has been removed
+        self.assertFalse(os.path.isdir(db_path))
 
     def test_dump(self):
         """Test/ example of dump and retrieve from a MongoDB database."""
