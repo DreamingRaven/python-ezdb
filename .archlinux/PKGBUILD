@@ -6,13 +6,13 @@
 # Maintainer: George Raven <GeorgeRavenCommunity AT pm dot me>
 pkgname=python-ezdb-git
 _pkgsrcname="python-ezdb"
-pkgver=0.0.0.r31.d33228a
+pkgver=0.0.1.r7.2982f50
 pkgrel=1
 pkgdesc="Ezified python mongodb database."
 arch=('x86_64' 'aarch64')
 url="https://github.com/DreamingRaven/python-ezdb"
-_branch="dev"
-license=('MIT') # MIT is a special case store a copy in /usr/share/pkgname
+_branch="master"
+license=("OSL-3.0") # open software licence v3
 groups=()
 depends=('python-setuptools' 'python' 'python-pymongo')
 makedepends=('git'
@@ -20,11 +20,7 @@ makedepends=('git'
 						 'python-sphinx'
 						 'python-sphinx_rtd_theme'
 						 'python-sphinx-argparse')
-optdepends=('mongodb: local database creation'
-						'python-sphinx: documentation builder'
-						'python-sphinx_rtd_theme: documentation theme generator'
-						'python-sphinx-argparse: documentation auto generate argument list'
-						)
+optdepends=('mongodb: local database creation and check unittests')
 provides=("python-ezdb")
 conflicts=()
 replaces=()
