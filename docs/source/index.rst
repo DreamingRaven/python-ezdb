@@ -11,4 +11,8 @@ pyrtd
   :caption: Table of Contents
   :numbered:
 
+  license
+  serving
   mongo
+  disambiguation
+  troubleshooting

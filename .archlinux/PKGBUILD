@@ -6,22 +6,26 @@
 # Maintainer: George Raven <GeorgeRavenCommunity AT pm dot me>
 pkgname=python-ezdb-git
 _pkgsrcname="python-ezdb"
-pkgver=0.0.0.r15.5c7af6f
+pkgver=0.0.0.r31.d33228a
 pkgrel=1
 pkgdesc="Ezified python mongodb database."
 arch=('x86_64' 'aarch64')
 url="https://github.com/DreamingRaven/python-ezdb"
-_branch="master"
+_branch="dev"
 license=('MIT') # MIT is a special case store a copy in /usr/share/pkgname
 groups=()
 depends=('python-setuptools' 'python' 'python-pymongo')
-makedepends=('git')
+makedepends=('git'
+						 'make'
+						 'python-sphinx'
+						 'python-sphinx_rtd_theme'
+						 'python-sphinx-argparse')
 optdepends=('mongodb: local database creation'
 						'python-sphinx: documentation builder'
 						'python-sphinx_rtd_theme: documentation theme generator'
 						'python-sphinx-argparse: documentation auto generate argument list'
 						)
-provides=()
+provides=("python-ezdb")
 conflicts=()
 replaces=()
 backup=()
@@ -42,17 +46,30 @@ prepare() {
 }
 
 build() {
-	cd "${srcdir}/${_pkgsrcname}"
+	# build man pages
+	cd "${srcdir}/${_pkgsrcname}/docs"
+	make man
 }
 
 check() {
 	cd "${srcdir}/${_pkgsrcname}"
-	python3 ./ezdb.py
+	# skip check if you do not have MongoDB installed:
+	# can not test without MongoDB itself
+	python3 ./unit_test.py
 }
 
 package() {
 	cd "${srcdir}/${_pkgsrcname}"
+
+	# installing library files
 	python3 ./setup.py install --prefix=/usr --root="$pkgdir/" --optimize=1
+	# except python sphinx docs
+	rm -r $pkgdir/usr/lib/python*/site-packages/docs
+
+	# install licence
 	install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
-	# install -Dm644 docs/build/man/python-ezdb.1 "$pkgdir/usr/share/man/man1/python-ezdb.1"
+
+	# install man pages built in build()
+	mkdir -p "$pkgdir/usr/share/man/man1/"
+	install -Dm644 docs/build/man/* "$pkgdir/usr/share/man/man1/"
 }

@@ -17,21 +17,21 @@ This unit test also briefly shows how to use gridfs by dumping tuple items in th
 
 Setting up a basic database, and initializing it with a user.
 
-.. literalinclude:: ../../ezdb.py
+.. literalinclude:: ../../unit_test.py
     :pyobject: Mongo_tests.setUp
 
 Connecting to and dumping data to a database using normal mongodb requests.
 
-.. literalinclude:: ../../ezdb.py
+.. literalinclude:: ../../unit_test.py
     :pyobject: Mongo_tests.test_dump
 
 Completely removing the database, this completely removes all your data.
 
-.. literalinclude:: ../../ezdb.py
+.. literalinclude:: ../../unit_test.py
     :pyobject: Mongo_tests.tearDown
 
 API
 +++
 
-.. autoclass:: ezdb.Mongo
+.. autoclass:: ezdb.mongo.Mongo
   :members:
