@@ -754,8 +754,11 @@ def _mongo_unit_test():
 
 
 class Mongo_tests(unittest.TestCase):
-    """Unit test class aggregating all tests for the Mongo class"""
-    import shutil
+    """Unit test class aggregating all tests for the Mongo class
+
+    There will be imports within functions here, this is to create complete
+    examples for generating docs with.
+    """
 
     def setUp(self):
         """Predefined setUp function for preparing tests, in our case
@@ -770,12 +773,15 @@ class Mongo_tests(unittest.TestCase):
     def tearDown(self):
         """Predefined tearDown function for cleaning up after tests,
         in our case deleting any generated db files."""
+        import shutil
+
         self.db.stop()
         if(self.db_path is not None):
-            self.shutil.rmtree(self.db_path)
+            shutil.rmtree(self.db_path)
         self.assertFalse(os.path.isdir(self.db_path))
 
     def test_dump(self):
+        """Test/ example of dump and retrieve from a MongoDB database."""
         db = Mongo({"pylog": null_printer})
         self.assertIsInstance(db, Mongo)
         db.connect()
@@ -787,6 +793,7 @@ class Mongo_tests(unittest.TestCase):
                 self.assertEqual(doc["success"], 1)
 
     def test_gridfs(self):
+        """Test/ example of gridfs dump and retrieve from MongoDB."""
         db = Mongo({"pylog": null_printer})
         self.assertIsInstance(db, Mongo)
         db.connect()
