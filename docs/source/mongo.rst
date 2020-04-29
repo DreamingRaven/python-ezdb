@@ -25,6 +25,11 @@ Connecting to and dumping data to a database using normal mongodb requests.
 .. literalinclude:: ../../unit_test.py
     :pyobject: Mongo_tests.test_dump
 
+Using Gridfs to dump larger files in chunks to database.
+
+.. literalinclude:: ../../unit_test.py
+    :pyobject: Mongo_tests.test_gridfs
+
 Completely removing the database, this completely removes all your data.
 
 .. literalinclude:: ../../unit_test.py
