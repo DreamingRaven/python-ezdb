@@ -81,3 +81,44 @@ Archlinux
   git clone https://github.com/DreamingRaven/python-ezdb
   cd python-ezdb/.archlinux/
   makepkg -si
+
+.. _section_virtual-env:
+
+Virtual env
+-----------
+
+To create the `python-virtualenv <https://wiki.archlinux.org/index.php/Python/Virtual_environment>`_:
+
+.. code-block:: bash
+
+    virtualenv venv
+
+If python 3 is not the default python for your virtualenvironment, simply delete the new directory ``venv`` and instead use the following to generate a new one with python3:
+
+.. code-block:: bash
+
+     virtualenv -p python3 venv
+
+To then use the newly created virtual environment:
+
+.. code-block:: bash
+
+    source venv/bin/activate
+
+OR if you are using a terminal like fish:
+
+.. code-block:: bash
+
+    source venv/bin/activate.fish
+
+To install Nemesyst and all its dependencies into a virtual environment while it is being used (activated):
+
+.. code-block:: bash
+
+    pip install git+https://github.com/DreamingRaven/nemesyst.git#branch=master
+
+To exit the virtual environment:
+
+.. code-block:: bash
+
+      deactivate
