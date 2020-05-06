@@ -36,6 +36,9 @@
 .. _letsencrypt: https://www.letsencrypt.org/
 .. |letsencrypt| replace:: LetsEncrypt
 
+.. _tls: https://docs.mongodb.com/manual/core/security-transport-encryption/
+.. |tls| replace:: TLS/SSL
+
 .. |troubleshooting| replace:: :ref:`section_ts_mongodb`
 .. |section_mongo| replace:: :ref:`section_mongo`
 
@@ -122,7 +125,7 @@ Nemesyst can be used to log you in to the mongo shell although this feature shou
 Mongo
 *****
 
-To connect to an non-sharded database with autnentication but no TLS/SSL:
+To connect to an non-sharded database with autnentication but no |tls|_:
 
 :|bash shell|_ example\::
 
@@ -267,17 +270,17 @@ Now the rs.conf should exist so we are free to add members to the replica set.
 
     rs.add({host: "|hostname|:|port|"})
 
-From plaintext database to SSL/TLS
-++++++++++++++++++++++++++++++++++
+From plaintext database to |tls|_
++++++++++++++++++++++++++++++++++
 
 First it is necessary to generate a key and a certificate file for our use. For now these can be self signed but in future you may want to look at getting them signed by a certificate authority such as |letsencrypt|_.
 
-Generating a self signed certificate and key
---------------------------------------------
+Generating a certificate authority key, and then a self signed certificate
+--------------------------------------------------------------------------
 
 This example shows generating an encrypted RSA key. If you would instead prefer it to be plaintext remove ```-aes-256-cbc```.
 
-:|bash shell|_ generate encrypted RSA key example\::
+:|bash shell|_ generate encrypted RSA certificate authority private key example\::
 
   .. parsed-literal::
 
@@ -292,7 +295,7 @@ This example shows generating an encrypted RSA key. If you would instead prefer 
 .. note::
   It should be noted that MongoDB does hostname validation using this certificate file.
   The things we are aware of are the hostname must match, and in the case of replicas one thing like organization name must match between the communicating replicas if they use SSL/TLS.
-  It should also be noted that Pymongo unlike mongo does not interpret between hostname and ip address the same way, an example can be found in troubleshooting.
+  It should also be noted that Pymongo unlike mongo does not interpret between hostname and ip address the same way, an example can be found in |troubleshooting|.
 
 This should now leave you with two files, an ``ssl_key`` and a ``signed_certificate``. We can now combine these two together to create a .pem file with both to provide to |mongodb|_.
 This new file will is the certificate-key file.
@@ -302,10 +305,10 @@ This new file will is the certificate-key file.
   .. parsed-literal::
 
       cat ``signed_certificate`` > |ckfile|_
-      cat ``ssl_key`` >> ``certificateKeyFile.pem``
+      cat ``ssl_key`` >> |ckfile|_
 
-Using our certificate and key
------------------------------
+Using our certificate and key as the server
+-------------------------------------------
 
 Almost all of the required changes take place in the mongodb config file/ how you call mongod itself.
 
@@ -318,15 +321,20 @@ Almost all of the required changes take place in the mongodb config file/ how yo
       port: ``27017``
       tls:
         mode: requireTLS
-        certificateKeyFile: ``certificateKeyFile.pem``
+        certificateKeyFile: |ckfile|_ # this should be a path to this file
         certificateKeyFilePassword: ``password``
         allowConnectionsWithoutCertificates: true
 
-An example tls enabled replica set database config file can be seen below. This however requires a few additional files for authenticating the databases and certificates for SSL/TLS that you will need to generate.
+An example |tls|_ enabled replica set database config file can be seen below. This however requires a few additional files for authenticating the databases and certificates for SSL/TLS that you will need to generate.
 
 :|files-only| example ``./examples/mongod.d/authenticated_replicaset.yaml``\::
 
   .. literalinclude:: ../../examples/mongod.d/authenticated_replicaset.yaml
+
+Using our certificate and key as the client
+-------------------------------------------
+
+Self signed certificates are just as valid, and as good as any other certificate, with one exception; only machines we can install our certificate on will trust us, unless we disable this layer of trust entirely. Thus if our certificate is self signed then the certificate file in our case ``signed_certificate`` must be installed on each machine that we desire to trust our |mongodb|_ instance.
 
 Troubleshooting
 +++++++++++++++
@@ -349,6 +357,9 @@ Further reading
 - `rs.initiate <https://docs.mongodb.com/manual/reference/method/rs.initiate//>`_
 - `add members <https://docs.mongodb.com/manual/tutorial/expand-replica-set//>`_
 
+|tls|_:
+
+- `arch wiki tls <https://wiki.archlinux.org/index.php/Transport_Layer_Security/>`_
 
 ..
   `link template </>`_
