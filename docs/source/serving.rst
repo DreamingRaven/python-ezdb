@@ -33,6 +33,9 @@
 .. _ckfile: https://docs.mongodb.com/manual/tutorial/configure-ssl/#mongod-and-mongos-certificate-key-file
 .. |ckfile| replace:: ``ckfile.pem``
 
+.. _letsencrypt: https://www.letsencrypt.org/
+.. |letsencrypt| replace:: LetsEncrypt
+
 .. |troubleshooting| replace:: :ref:`section_ts_mongodb`
 .. |section_mongo| replace:: :ref:`section_mongo`
 
@@ -174,9 +177,9 @@ This section will outline how to take a currently standard database and turn it 
 |mongodb| config file setup for replica sets
 --------------------------------------------
 
-:|files-only| example ``./examples/configs/mongo/replica.yaml``\::
+:|files-only| example ``./examples/mongod.d/replica.yaml``\::
 
-  .. literalinclude:: ../../examples/configs/mongo/replica.yaml
+  .. literalinclude:: ../../examples/mongod.d/replica.yaml
 
 Checking the current status of the replica sets
 -----------------------------------------------
@@ -267,7 +270,7 @@ Now the rs.conf should exist so we are free to add members to the replica set.
 From plaintext database to SSL/TLS
 ++++++++++++++++++++++++++++++++++
 
-First it is necessary to generate a key and a certificate file for our use. For now these can be self signed but in future you may want to look at getting them signed by a certificate authority.
+First it is necessary to generate a key and a certificate file for our use. For now these can be self signed but in future you may want to look at getting them signed by a certificate authority such as |letsencrypt|_.
 
 Generating a self signed certificate and key
 --------------------------------------------
@@ -321,9 +324,9 @@ Almost all of the required changes take place in the mongodb config file/ how yo
 
 An example tls enabled replica set database config file can be seen below. This however requires a few additional files for authenticating the databases and certificates for SSL/TLS that you will need to generate.
 
-:|files-only| example ``./examples/configs/mongo/authenticated_replicaset.yaml``\::
+:|files-only| example ``./examples/mongod.d/authenticated_replicaset.yaml``\::
 
-  .. literalinclude:: ../../examples/configs/mongo/authenticated_replicaset.yaml
+  .. literalinclude:: ../../examples/mongod.d/authenticated_replicaset.yaml
 
 Troubleshooting
 +++++++++++++++

@@ -48,6 +48,8 @@
 troubleshooting
 ===============
 
+.. _section_ts_mongodb:
+
 MongoDB/ Serving Issues
 +++++++++++++++++++++++
 
