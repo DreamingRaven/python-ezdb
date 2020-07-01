@@ -111,17 +111,6 @@ To be able to fine tune, create users, update etc it will be necessary to connec
  .. note::
    If there is no `userAdmin or userAdminAnyDatabase <https://docs.mongodb.com/manual/reference/built-in-roles/#userAdmin>`_ then unless expressly configured there will be a localhost exception which will allow you to log in and create this user. If this user exists the localhost exception will close. Please ensure you configure this user as they can grant any role or rights to anyone and would be a major security concern along with making it very difficult to admin your database.
 
-Nemesyst
-********
-
-Nemesyst can be used to log you in to the mongo shell although this feature should not be depended on, and instead it is recommended to use mongo for anything more complicated than simple testing. You will need to provide any other options like ip port etc if it is not using the defaults.
-
-:|bash shell|_ simple all defaults example\::
-
-  .. parsed-literal::
-
-    nemesyst --db-login
-
 Mongo
 *****
 
