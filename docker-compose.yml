@@ -27,3 +27,10 @@ services:
       - /containers/mongodb/dbexample:/data/db
       - ./examples/mongod.d:/etc/mongod:ro
     restart: always
+
+  ezdb:
+    build:
+      context: ./
+      dockerfile: Dockerfile_ubuntu
+    image: archer/python-ezdb
+    container_name: python-ezdb
