@@ -1,0 +1,29 @@
+# @Author: archer
+# @Date:   2019-09-13T12:52:06+01:00
+# @Last modified by:   archer
+# @Last modified time: 2020-06-19T10:59:00+01:00
+
+
+
+# set environment variables using .env file located in this same directory
+version: "3.6" # docker on raspberry pi 4 compatibl version = <=3.6
+
+services:
+
+  mongodb0:
+    container_name: mongodb_server0
+    # this is the official image name to use so we dont have to create one
+    image: "mongo"
+    ports:
+      # "local-port:container-port":
+      - "127.0.0.1:65520:27017"
+      # - "65520:27017" # this instead of above is accesible from other machines
+    command:
+      - "--config"
+      - "/etc/mongod/mongod.yaml"
+    volumes:
+      # "volume-name:in-container mount point (not local system):"
+      # or /local/location:/docker/location
+      - /containers/mongodb/dbexample:/data/db
+      - ./examples/mongod.d:/etc/mongod:ro
+    restart: always
