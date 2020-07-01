@@ -115,7 +115,7 @@ To install Nemesyst and all its dependencies into a virtual environment while it
 
 .. code-block:: bash
 
-    pip install git+https://github.com/DreamingRaven/nemesyst.git#branch=master
+    pip install git+https://github.com/DreamingRaven/python-ezdb.git#branch=master
 
 To exit the virtual environment:
 

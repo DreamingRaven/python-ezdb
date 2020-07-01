@@ -1,0 +1,16 @@
+security:
+  keyFile: mongo.key
+  authorization: enabled
+replication:
+  replSetName: rs0
+processManagement:
+  fork: true
+net:
+  bindIp: 0.0.0.0
+  port: 65535
+systemLog:
+  path: mongolog.log
+  destination: file
+storage:
+  dbPath: /data/db
+  directoryPerDB: true

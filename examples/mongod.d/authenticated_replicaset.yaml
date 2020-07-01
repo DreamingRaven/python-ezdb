@@ -1,0 +1,21 @@
+security:
+  keyFile: mongo.key
+  authorization: enabled
+replication:
+  replSetName: rs0
+processManagement:
+  fork: true
+net:
+  bindIp: 0.0.0.0
+  port: 65535 # the highest number port possible to use
+  tls:
+    mode: requireTLS
+    certificateKeyFile: ckfile.pem # path to ckfile.pem
+    certificateKeyFilePassword: passwordIfItHasOneAtAll # password for ckfile
+    allowConnectionsWithoutCertificates: true
+systemLog:
+  path: mongolog.log
+  destination: file
+storage:
+  dbPath: /data/db
+  directoryPerDB: true
