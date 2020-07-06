@@ -505,10 +505,12 @@ class Mongo(object):
         db = db if db is not None else self.args["db"]
 
         if isinstance(data, dict) and data:
-            db[str(db_collection_name)].insert_one(data)
+            output = db[str(db_collection_name)].insert_one(data)
         elif isinstance(data, tuple) and data:
             gfs = gridfs.GridFS(db, collection=db_collection_name)
-            gfs.put(data[1], **data[0])
+            output = gfs.put(data[1], **data[0])
+        # returning output so user can see if worked or not
+        return output
 
     dump.__annotations__ = {"db_collection_name": str, "data": dict,
                             "db": database.Database, "return": None}
