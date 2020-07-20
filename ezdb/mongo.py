@@ -633,6 +633,19 @@ class Mongo(object):
                                 "db": database.Database,
                                 "return": list}
 
+    def donate(self, other, other_collection, db_data_cursor=None):
+        """Donate documents to another db collection.
+
+        Like giving blood, we are not getting anything back to self, other
+        than maybe gratification.
+        """
+        docs_donated = []
+        for batch in self.getBatches():
+            for doc in batch:
+                other.dump(db_collection_name=other_collection, data=doc)
+                docs_donated.append(doc["_id"])
+        return docs_donated
+
     def _nextBatch(self, cursor, db_batch_size):
         """Return the very next batch in mongoDb cursor."""
         batch = []
@@ -694,7 +707,6 @@ class Mongo(object):
 def _mongo_unit_test():
     """Unit test of MongoDB compat."""
     import datetime
-    import pickle
     # create Mongo object to use
     db = Mongo({"test2": 2, "db_port": "65535"})
     # testing magic functions
