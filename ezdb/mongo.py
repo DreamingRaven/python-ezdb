@@ -633,17 +633,21 @@ class Mongo(object):
                                 "db": database.Database,
                                 "return": list}
 
-    def donate(self, other, other_collection, db_data_cursor=None):
+    def donate(self, other, other_collection, db_data_cursor=None, sum=None):
         """Donate documents to another db collection.
 
         Like giving blood, we are not getting anything back to self, other
         than maybe gratification.
         """
+        count = 0
         docs_donated = []
         for batch in self.getBatches():
             for doc in batch:
                 other.dump(db_collection_name=other_collection, data=doc)
                 docs_donated.append(doc["_id"])
+                if(count % 10 == 0) and sum:
+                    self.args["pylog"]("{}/{}".format(count, sum))
+                count = count + 1
         return docs_donated
 
     def _nextBatch(self, cursor, db_batch_size):
