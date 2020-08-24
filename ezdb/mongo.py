@@ -643,8 +643,11 @@ class Mongo(object):
         docs_donated = []
         for batch in self.getBatches():
             for doc in batch:
-                other.dump(db_collection_name=other_collection, data=doc)
-                docs_donated.append(doc["_id"])
+                try:
+                    other.dump(db_collection_name=other_collection, data=doc)
+                    docs_donated.append(doc["_id"])
+                except errors.DuplicateKeyError:
+                    self.args["pylog"]("WARN: duplicate: {}".format(doc["id"]))
                 if(count % 10 == 0) and sum:
                     self.args["pylog"]("{}/{}".format(count, sum))
                 count = count + 1
