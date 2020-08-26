@@ -633,7 +633,8 @@ class Mongo(object):
                                 "db": database.Database,
                                 "return": list}
 
-    def donate(self, other, other_collection, db_data_cursor=None, sum=None):
+    def donate(self, other, other_collection, db_collection_name,
+               db_data_cursor=None, sum=None):
         """Donate documents to another db collection.
 
         Like giving blood, we are not getting anything back to self, other
@@ -646,12 +647,17 @@ class Mongo(object):
                 try:
                     other.dump(db_collection_name=other_collection, data=doc)
                     docs_donated.append(doc["_id"])
+                    self.deleteId(id=doc["_id"],
+                                  db_collection_name=db_collection_name)
                 except errors.DuplicateKeyError:
                     self.args["pylog"]("WARN: duplicate: {}".format(doc["id"]))
                 if(count % 10 == 0) and sum:
                     self.args["pylog"]("{}/{}".format(count, sum))
                 count = count + 1
         return docs_donated
+
+    def deleteId(self, id, db_collection_name):
+        return self.args["db"][db_collection_name].delete_one({"_id": id})
 
     def _nextBatch(self, cursor, db_batch_size):
         """Return the very next batch in mongoDb cursor."""

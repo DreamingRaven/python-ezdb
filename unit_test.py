@@ -84,6 +84,25 @@ class Mongo_tests(unittest.TestCase):
                 # read file and check is equal to what we put in
                 self.assertEqual(grid["gridout"].read(), b'success')
 
+    def test_delete(self):
+        """Test that we can delete items from db correctly by id."""
+        from ezdb.mongo import Mongo
+
+        db = Mongo({"pylog": null_printer})
+        self.assertIsInstance(db, Mongo)
+        db.connect()
+        db.dump(db_collection_name="test", data={"success": 1})
+        cursor = db.getCursor(db_collection_name="test")
+        for batch in db.getBatches(db_data_cursor=cursor):
+            self.assertEqual(len(batch), 1)
+            for doc in batch:
+                self.assertEqual(doc["success"], 1)
+                db.deleteId(db_collection_name="test", id=doc["_id"])
+
+        cursor = db.getCursor(db_collection_name="test")
+        deleted_collection = list(db.getBatches(db_data_cursor=cursor))
+        self.assertEqual(deleted_collection, [])
+
 
 def null_printer(*text, log_min_level=None,
                  log_delimiter=None):
