@@ -652,6 +652,8 @@ class Mongo(object):
                 except errors.DuplicateKeyError:
                     self.args["pylog"]("WARN: duplicate: {}".format(
                         doc["_id"]))
+                    self.deleteId(id=doc["_id"],
+                                  db_collection_name=db_collection_name)
                 if(count % 10 == 0) and sum:
                     self.args["pylog"]("{}/{}".format(count, sum))
                 count = count + 1
