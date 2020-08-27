@@ -5,7 +5,7 @@
 # @Email:  george raven community at pm dot me
 # @Filename: ezdb.py
 # @Last modified by:   archer
-# @Last modified time: 2020-04-09T20:51:27+01:00
+# @Last modified time: 2020-08-27T11:47:07+01:00
 # @License: Please see LICENSE in project root
 
 # from __future__ import print_function, absolute_import   # python 2-3 compat
@@ -16,6 +16,7 @@ import copy
 from pymongo import MongoClient, errors, database, command_cursor
 import gridfs
 import re
+import bson
 
 
 class Mongo(object):
@@ -481,6 +482,23 @@ class Mongo(object):
 
     _addUser.__annotations__ = {"return": None}
 
+    def userAdd(self, username, password, roles):
+        """Take new credentials and create new user in database"""
+        # https://pymongo.readthedocs.io/en/stable/api/pymongo/database.html#pymongo.database.Database.add_user
+        # db.command("createUser", "admin", pwd="password", roles=["root"])
+        return self.args["db"].command("createUser",
+                                       username,
+                                       pwd=password,
+                                       roles=roles)
+
+    userAdd.__annotations__ = {"username": str,
+                               "password": str,
+                               "roles": list,
+                               "return": None}
+
+    def userInfo(self, username):
+        return self.args["db"].command("usersInfo", username)
+
     def debug(self):
         """Log function to help track the internal state of the class.
 
@@ -660,6 +678,8 @@ class Mongo(object):
         return docs_donated
 
     def deleteId(self, id, db_collection_name):
+        if not isinstance(id, bson.objectid.ObjectId):
+            id = bson.objectid.ObjectId(id)
         return self.args["db"][db_collection_name].delete_one({"_id": id})
 
     def _nextBatch(self, cursor, db_batch_size):
