@@ -1,7 +1,7 @@
 # @Author: GeorgeRaven <archer>
 # @Date:   2020-10-20T23:58:25+01:00
 # @Last modified by:   archer
-# @Last modified time: 2020-10-21T14:16:52+01:00
+# @Last modified time: 2020-10-21T14:21:22+01:00
 # @License: please see LICENSE file in project root
 
 image: docker:stable
@@ -15,6 +15,7 @@ before_script:
 build:
   only:
     - master
+    - dev
   # before_script:
   #   - docker login registry.gitlab.com -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
   script:
