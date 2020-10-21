@@ -1,7 +1,7 @@
 # @Author: archer
 # @Date:   2019-09-13T12:52:06+01:00
 # @Last modified by:   archer
-# @Last modified time: 2020-06-19T10:59:00+01:00
+# @Last modified time: 2020-10-21T14:19:03+01:00
 
 
 
@@ -31,6 +31,6 @@ services:
   ezdb:
     build:
       context: ./
-      dockerfile: Dockerfile_ubuntu
+      dockerfile: Dockerfile
     image: archer/python-ezdb
     container_name: python-ezdb
