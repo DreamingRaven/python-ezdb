@@ -5,7 +5,7 @@
 # @Email:  george raven community at pm dot me
 # @Filename: ezdb.py
 # @Last modified by:   archer
-# @Last modified time: 2020-08-27T11:47:07+01:00
+# @Last modified time: 2021-01-15T12:52:12+00:00
 # @License: Please see LICENSE in project root
 
 # from __future__ import print_function, absolute_import   # python 2-3 compat
@@ -256,7 +256,8 @@ class Mongo(object):
         client_args = {}
         client_args["host"] = ["{0}:{1}".format(str(db_ip), str(db_port))]
 
-        if (db_authentication is not None) and (db_authentication != ""):
+        if (db_authentication is not None) and (db_authentication != "") and \
+                (db_authentication is not False):
             # authentication
             client_args["authMechanism"] = db_authentication
             client_args["username"] = db_user_name
@@ -264,13 +265,14 @@ class Mongo(object):
             client_args["authSource"] = db_authentication_database if \
                 db_authentication_database is not None else db_name
 
-        if (db_replica_set_name is not None):
+        if (db_replica_set_name is not None) and (db_replica_set_name != "") \
+                and (db_replica_set_name is not False):
             # replica set
             client_args["replicaset"] = db_replica_set_name
             client_args["readPreference"] = db_replica_read_preference
             client_args["maxStalenessSeconds"] = db_replica_max_staleness
 
-        if (db_tls is not None):
+        if (db_tls is not None) and (db_tls != "") and (db_tls is not False):
             # tls
             client_args["tls"] = db_tls  # False
             client_args["tlsCAFile"] = db_tls_ca_file  # None
@@ -668,6 +670,7 @@ class Mongo(object):
                     self.deleteId(id=doc["_id"],
                                   db_collection_name=db_collection_name)
                 except errors.DuplicateKeyError:
+                    # if duplicate still delete by ID the document
                     self.args["pylog"]("WARN: duplicate: {}".format(
                         doc["_id"]))
                     self.deleteId(id=doc["_id"],
