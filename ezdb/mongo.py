@@ -5,7 +5,7 @@
 # @Email:  george raven community at pm dot me
 # @Filename: ezdb.py
 # @Last modified by:   archer
-# @Last modified time: 2020-04-09T20:51:27+01:00
+# @Last modified time: 2021-01-15T14:23:03+00:00
 # @License: Please see LICENSE in project root
 
 # from __future__ import print_function, absolute_import   # python 2-3 compat
@@ -16,6 +16,7 @@ import copy
 from pymongo import MongoClient, errors, database, command_cursor
 import gridfs
 import re
+import bson
 
 
 class Mongo(object):
@@ -52,7 +53,7 @@ class Mongo(object):
             "db_user_role": "readWrite",
             "db_ip": "localhost",
             "db_bind_ip": ["localhost"],
-            "db_name": "nemesyst",
+            "db_name": "ez-database",
             "db_collection_name": "test",
             "db_port": "27017",
             "db_path": "db",
@@ -255,7 +256,8 @@ class Mongo(object):
         client_args = {}
         client_args["host"] = ["{0}:{1}".format(str(db_ip), str(db_port))]
 
-        if (db_authentication is not None) and (db_authentication != ""):
+        if (db_authentication is not None) and (db_authentication != "") and \
+                (db_authentication is not False):
             # authentication
             client_args["authMechanism"] = db_authentication
             client_args["username"] = db_user_name
@@ -263,13 +265,14 @@ class Mongo(object):
             client_args["authSource"] = db_authentication_database if \
                 db_authentication_database is not None else db_name
 
-        if (db_replica_set_name is not None):
+        if (db_replica_set_name is not None) and (db_replica_set_name != "") \
+                and (db_replica_set_name is not False):
             # replica set
             client_args["replicaset"] = db_replica_set_name
             client_args["readPreference"] = db_replica_read_preference
             client_args["maxStalenessSeconds"] = db_replica_max_staleness
 
-        if (db_tls is not None):
+        if (db_tls is not None) and (db_tls != "") and (db_tls is not False):
             # tls
             client_args["tls"] = db_tls  # False
             client_args["tlsCAFile"] = db_tls_ca_file  # None
@@ -481,6 +484,23 @@ class Mongo(object):
 
     _addUser.__annotations__ = {"return": None}
 
+    def userAdd(self, username, password, roles):
+        """Take new credentials and create new user in database"""
+        # https://pymongo.readthedocs.io/en/stable/api/pymongo/database.html#pymongo.database.Database.add_user
+        # db.command("createUser", "admin", pwd="password", roles=["root"])
+        return self.args["db"].command("createUser",
+                                       username,
+                                       pwd=password,
+                                       roles=roles)
+
+    userAdd.__annotations__ = {"username": str,
+                               "password": str,
+                               "roles": list,
+                               "return": None}
+
+    def userInfo(self, username):
+        return self.args["db"].command("usersInfo", username)
+
     def debug(self):
         """Log function to help track the internal state of the class.
 
@@ -650,6 +670,7 @@ class Mongo(object):
                     self.deleteId(id=doc["_id"],
                                   db_collection_name=db_collection_name)
                 except errors.DuplicateKeyError:
+                    # if duplicate still delete by ID the document
                     self.args["pylog"]("WARN: duplicate: {}".format(
                         doc["_id"]))
                     self.deleteId(id=doc["_id"],
@@ -660,6 +681,8 @@ class Mongo(object):
         return docs_donated
 
     def deleteId(self, id, db_collection_name):
+        if not isinstance(id, bson.objectid.ObjectId):
+            id = bson.objectid.ObjectId(id)
         return self.args["db"][db_collection_name].delete_one({"_id": id})
 
     def _nextBatch(self, cursor, db_batch_size):

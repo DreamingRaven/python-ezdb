@@ -5,7 +5,7 @@
 # @Email:  george raven community at pm dot me
 # @Filename: ezdb.py
 # @Last modified by:   archer
-# @Last modified time: 2020-04-09T20:51:27+01:00
+# @Last modified time: 2021-01-15T14:27:19+00:00
 # @License: Please see LICENSE in project root
 
 # from __future__ import print_function, absolute_import   # python 2-3 compat
@@ -102,6 +102,16 @@ class Mongo_tests(unittest.TestCase):
         cursor = db.getCursor(db_collection_name="test")
         deleted_collection = list(db.getBatches(db_data_cursor=cursor))
         self.assertEqual(deleted_collection, [])
+
+    def test_userAdd(self):
+        from ezdb.mongo import Mongo
+
+        db = Mongo({"pylog": null_printer})
+        self.assertIsInstance(db, Mongo)
+        db.connect()
+        a = db.userAdd(username="test", password="test", roles=["readWrite"])
+        b = db.userInfo(username="test")
+        print("TEST USER ADD: {}, {}".format(a, b))
 
 
 def null_printer(*text, log_min_level=None,
