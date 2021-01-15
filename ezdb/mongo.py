@@ -5,7 +5,7 @@
 # @Email:  george raven community at pm dot me
 # @Filename: ezdb.py
 # @Last modified by:   archer
-# @Last modified time: 2021-01-15T12:52:12+00:00
+# @Last modified time: 2021-01-15T14:23:03+00:00
 # @License: Please see LICENSE in project root
 
 # from __future__ import print_function, absolute_import   # python 2-3 compat
@@ -53,7 +53,7 @@ class Mongo(object):
             "db_user_role": "readWrite",
             "db_ip": "localhost",
             "db_bind_ip": ["localhost"],
-            "db_name": "nemesyst",
+            "db_name": "ez-database",
             "db_collection_name": "test",
             "db_port": "27017",
             "db_path": "db",
