@@ -3,7 +3,7 @@
 # @Author: GeorgeRaven <archer>
 # @Date:   2021-04-21T00:25:06+01:00
 # @Last modified by:   archer
-# @Last modified time: 2021-04-21T15:11:15+01:00
+# @Last modified time: 2021-04-21T22:55:20+01:00
 # @License: please see LICENSE file in project root
 
 
@@ -108,10 +108,11 @@ class stress_db(unittest.TestCase):
         """Connect to db and set up timer."""
         self.args = global_args
         self.startTime = time.time()
-        self.data = [
-            # comment or uncomment what you most closeley matches your use
-            # you can uncomment multiple if you have multi-varying inputs
 
+    @property
+    def data(self):
+        """Get completeley randomized data."""
+        return [
             # standard full HD image
             io.BytesIO(np.random.rand(1920, 1080, 3)),
 
@@ -138,6 +139,7 @@ class stress_db(unittest.TestCase):
                 range(self.args["iterations"])):
             # dump all data associated with a single iteration
             for data in self.data:
+                print("submitting: ", i)
                 db.dump(
                     db_collection_name=self.args["db_collection_name"], data=(
                         {"iteration": i}, data))
@@ -149,13 +151,6 @@ class stress_db(unittest.TestCase):
     def test_single_stream_graphical(self):
         """Single process data stream."""
         self.single_gridfs_data_stream(graphical=True)
-
-    # def test_stress_gridfs(self):
-    #     """Stress test repeated large gridfs documents."""
-    #     # creating process pool with context manager
-    #     with mp.Pool(processes=self.args["processes"]) as pool:
-    #         # calling each process pool
-    #         pool.apply(self.single_gridfs_data_stream)
 
 
 if __name__ == "__main__":
