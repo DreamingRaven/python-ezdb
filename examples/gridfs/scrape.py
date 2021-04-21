@@ -3,7 +3,7 @@
 # @Author: GeorgeRaven <archer>
 # @Date:   2021-04-21T00:25:06+01:00
 # @Last modified by:   archer
-# @Last modified time: 2021-04-21T16:47:21+01:00
+# @Last modified time: 2021-04-21T17:00:02+01:00
 # @License: please see LICENSE file in project root
 
 import os
@@ -116,10 +116,14 @@ class scrape_gridfs_db(unittest.TestCase):
                 print(grid["_id"])
                 b = grid["gridout"].read()
                 data = io.BytesIO(b)
-                filename = "{}_{}.jpeg".format(
-                    grid["metadata"]["datetime"].strftime(
-                        "%Y-%m-%dT%H:%M:%S"),
-                    grid["_id"])
+
+                try:
+                    filename = "{}_{}.jpeg".format(
+                        grid["metadata"]["datetime"].strftime(
+                            "%Y-%m-%dT%H:%M:%S"),
+                        grid["_id"])
+                except KeyError:
+                    filename = "{}.jpeg".format(grid["_id"])
 
                 if(os.path.isfile(filename) is not True):
                     print(filename)
