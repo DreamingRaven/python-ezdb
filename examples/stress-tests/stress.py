@@ -96,7 +96,6 @@ class stress_db(unittest.TestCase):
     def setUp(self):
         """Connect to db and set up timer."""
         self.db = Mongo(args)
-        self.db.connect()
         self.startTime = time.time()
         self.data = [
             # comment or uncomment what you most closeley matches your use
@@ -120,6 +119,7 @@ class stress_db(unittest.TestCase):
 
     def single_gridfs_data_stream(self):
         """Dump data to database sequentially."""
+        self.db.connect()
         # loop n many iterations
         for i in range(self.args["iterations"]):
             # dump all data associated with a single iteration
