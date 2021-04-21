@@ -6,6 +6,7 @@ import numpy as np
 import logging as logger
 import getpass
 import unittest
+import io
 from ezdb.mongo import Mongo
 import configargparse as argparse
 import multiprocessing as mp
@@ -46,7 +47,7 @@ def arg_handler(argv, description: str = None):
     parser.add_argument("-c", "--db-tls-ca-file",
                         type=str,
                         env_var="DB_TLS_CA_FILE",
-                        default="lcas-mongo.CA.cert",
+                        default="lcas-mongo-CA.cert",
                         help="Certificate authority file to use if any.")
     parser.add_argument("-N", "--db-name",
                         type=str,
@@ -83,6 +84,8 @@ def arg_handler(argv, description: str = None):
         level=logger.DEBUG if args["debug"] is True else logger.INFO,
         format="%(asctime)s %(levelname)s:%(message)s",
         datefmt="%Y-%m-%dT%H:%M:%S")
+    args["pylog"] = logger.debug
+    logger.debug("initial args: {}".format(args))
     # create password prompt if user has name but no pass or if specified to
     if (args["db_password_prompt"]) or \
             (args["db_password"] is None and args["db_user_name"] is not None):
@@ -95,22 +98,21 @@ class stress_db(unittest.TestCase):
 
     def setUp(self):
         """Connect to db and set up timer."""
-        self.db = Mongo(args)
+        self.args = global_args
         self.startTime = time.time()
         self.data = [
             # comment or uncomment what you most closeley matches your use
             # you can uncomment multiple if you have multi-varying inputs
 
             # standard full HD image
-            np.random.rand(1920, 1080, 3),
+            io.BytesIO(np.random.rand(1920, 1080, 3)),
 
             # depth map
-            np.random.rand(848, 480, 1),
+            io.BytesIO(np.random.rand(848, 480, 1)),
 
             # aligned depth map
-            np.random.rand(1920, 1080, 1),
+            io.BytesIO(np.random.rand(1920, 1080, 1)),
         ]
-        self.args = args
 
     def tearDown(self):
         """Consume time and display."""
@@ -119,12 +121,19 @@ class stress_db(unittest.TestCase):
 
     def single_gridfs_data_stream(self):
         """Dump data to database sequentially."""
+        self.db = Mongo(self.args)
         self.db.connect()
         # loop n many iterations
         for i in range(self.args["iterations"]):
             # dump all data associated with a single iteration
             for data in self.data:
-                self.db.dump(data=({"iteration": i}, data))
+                self.db.dump(
+                    db_collection_name=self.args["db_collection_name"], data=(
+                        {"iteration": i}, data))
+
+    def test_single_stream(self):
+        """Single process data stream."""
+        self.single_gridfs_data_stream()
 
     def test_stress_gridfs(self):
         """Stress test repeated large gridfs documents."""
@@ -136,5 +145,10 @@ class stress_db(unittest.TestCase):
 
 if __name__ == "__main__":
     # note setting this in global context for use in unittests
-    args = arg_handler(sys.argv[1:],
-                       description="Stress test a given database.")
+    global_args = arg_handler(sys.argv[1:],
+                              description="Stress test a given database.")
+    # delete our cli args so unittest does not have a fit
+    # we really shouldnt sideload args like this but its just a quick script
+    del sys.argv[1:]
+    # now call unittests to check everything through
+    unittest.main()
