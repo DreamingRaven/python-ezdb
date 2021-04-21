@@ -65,6 +65,11 @@ def arg_handler(argv, description: str = None):
     parser.add_argument("-v", "--debug", "--verbose",
                         action="store_true",
                         help="Debug/ verbose logging.")
+    parser.add_argument("--iterations",
+                        type=int,
+                        default=100,
+                        env_var="ITERATIONS",
+                        help="Number iterations of testing.")
 
     args = vars(parser.parse_args(argv))
     # spinning up logger
@@ -100,6 +105,7 @@ class stress_db(unittest.TestCase):
             # aligned depth map
             np.random.rand(1920, 1080, 1),
         ]
+        self.args = args
 
     def tearDown(self):
         """Consume time and display."""
@@ -108,8 +114,11 @@ class stress_db(unittest.TestCase):
 
     def test_stress_gridfs(self):
         """Stress test repeated large gridfs documents."""
-        for data in self.data:
-            pass
+        # loop n many iterations
+        for i in range(self.args["iterations"]):
+            # dump all data associated with a single iteration
+            for data in self.data:
+                self.db.dump(data=({"iteration": i}, data))
 
 
 if __name__ == "__main__":
