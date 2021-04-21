@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-import os
 import sys
 import time
+import numpy as np
 import logging as logger
 import getpass
 import unittest
@@ -87,6 +87,19 @@ class stress_db(unittest.TestCase):
         self.db = Mongo(args)
         self.db.connect()
         self.startTime = time.time()
+        self.data = [
+            # comment or uncomment what you most closeley matches your use
+            # you can uncomment multiple if you have multi-varying inputs
+
+            # standard full HD image
+            np.random.rand(1920, 1080, 3),
+
+            # depth map
+            np.random.rand(848, 480, 1),
+
+            # aligned depth map
+            np.random.rand(1920, 1080, 1),
+        ]
 
     def tearDown(self):
         """Consume time and display."""
@@ -95,11 +108,8 @@ class stress_db(unittest.TestCase):
 
     def test_stress_gridfs(self):
         """Stress test repeated large gridfs documents."""
-        pass
-
-    def test_stress_docs(self):
-        """Stress test repeated single mongodb documents."""
-        pass
+        for data in self.data:
+            pass
 
 
 if __name__ == "__main__":
