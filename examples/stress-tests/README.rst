@@ -22,3 +22,9 @@ This should automatically post a help page to indicate what parameters you might
   docker run -it archer/stress --db-port 27017 --db-user-name me --db-password-prompt True
 
 If you need to give it a TLS certificate just drop it in this directory, rebuild the docker image, then the container with the --db-tls-ca-file option giving the files name.
+
+If you require access to localhost or some local/ internal port then consider using host networking:
+
+.. code-block:: bash
+
+  docker run --network host -it archer/stress
