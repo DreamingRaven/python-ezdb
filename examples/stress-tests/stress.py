@@ -59,7 +59,7 @@ def arg_handler(argv, description: str = None):
                         help="Database to authenticate to.")
     parser.add_argument("-C", "--db-collection-name",
                         type=str,
-                        default="test",
+                        default="stress-test",
                         env_var="DB_COLLECTION_NAME",
                         help="Database collection to dump data to.")
     parser.add_argument("-v", "--debug", "--verbose",
@@ -92,6 +92,14 @@ class stress_db(unittest.TestCase):
         """Consume time and display."""
         t = time.time() - self.startTime
         print('%s: %.3f' % (self.id(), t))
+
+    def test_stress_gridfs(self):
+        """Stress test repeated large gridfs documents."""
+        pass
+
+    def test_stress_docs(self):
+        """Stress test repeated single mongodb documents."""
+        pass
 
 
 if __name__ == "__main__":
