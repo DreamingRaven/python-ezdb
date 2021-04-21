@@ -8,6 +8,7 @@ import getpass
 import unittest
 from ezdb.mongo import Mongo
 import configargparse as argparse
+import multiprocessing as mp
 
 
 def arg_handler(argv, description: str = None):
@@ -70,6 +71,11 @@ def arg_handler(argv, description: str = None):
                         default=100,
                         env_var="ITERATIONS",
                         help="Number iterations of testing.")
+    parser.add_argument("--processes",
+                        type=int,
+                        default=1,
+                        env_var="PROCESSES",
+                        help="Number of processes to dump into db with.")
 
     args = vars(parser.parse_args(argv))
     # spinning up logger
@@ -112,13 +118,20 @@ class stress_db(unittest.TestCase):
         t = time.time() - self.startTime
         print('%s: %.3f' % (self.id(), t))
 
-    def test_stress_gridfs(self):
-        """Stress test repeated large gridfs documents."""
+    def single_gridfs_data_stream(self):
+        """Dump data to database sequentially."""
         # loop n many iterations
         for i in range(self.args["iterations"]):
             # dump all data associated with a single iteration
             for data in self.data:
                 self.db.dump(data=({"iteration": i}, data))
+
+    def test_stress_gridfs(self):
+        """Stress test repeated large gridfs documents."""
+        # creating process pool with context manager
+        with mp.Pool(processes=self.args["processes"]) as pool:
+            # calling each process pool
+            pool.apply(self.single_gridfs_data_stream)
 
 
 if __name__ == "__main__":
