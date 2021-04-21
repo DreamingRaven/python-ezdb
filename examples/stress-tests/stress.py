@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 
+# @Author: GeorgeRaven <archer>
+# @Date:   2021-04-21T00:25:06+01:00
+# @Last modified by:   archer
+# @Last modified time: 2021-04-21T15:11:15+01:00
+# @License: please see LICENSE file in project root
+
+
 import sys
 import time
 import numpy as np
@@ -9,6 +16,7 @@ import unittest
 import io
 from ezdb.mongo import Mongo
 import configargparse as argparse
+from tqdm import tqdm
 import multiprocessing as mp
 
 
@@ -117,17 +125,20 @@ class stress_db(unittest.TestCase):
     def tearDown(self):
         """Consume time and display."""
         t = time.time() - self.startTime
-        print('%s: %.3f' % (self.id(), t))
+        # print('%s: %.3f' % (self.id(), t))
+        logger.info("{}: inserted {} GridFS docs in {}".format(
+            self.id(), self.args["iterations"]*len(self.data), t))
 
-    def single_gridfs_data_stream(self):
+    def single_gridfs_data_stream(self, graphical=None):
         """Dump data to database sequentially."""
-        self.db = Mongo(self.args)
-        self.db.connect()
+        db = Mongo(self.args)
+        db.connect()
         # loop n many iterations
-        for i in range(self.args["iterations"]):
+        for i in range(self.args["iterations"]) if graphical is None else tqdm(
+                range(self.args["iterations"])):
             # dump all data associated with a single iteration
             for data in self.data:
-                self.db.dump(
+                db.dump(
                     db_collection_name=self.args["db_collection_name"], data=(
                         {"iteration": i}, data))
 
@@ -135,12 +146,16 @@ class stress_db(unittest.TestCase):
         """Single process data stream."""
         self.single_gridfs_data_stream()
 
-    def test_stress_gridfs(self):
-        """Stress test repeated large gridfs documents."""
-        # creating process pool with context manager
-        with mp.Pool(processes=self.args["processes"]) as pool:
-            # calling each process pool
-            pool.apply(self.single_gridfs_data_stream)
+    def test_single_stream_graphical(self):
+        """Single process data stream."""
+        self.single_gridfs_data_stream(graphical=True)
+
+    # def test_stress_gridfs(self):
+    #     """Stress test repeated large gridfs documents."""
+    #     # creating process pool with context manager
+    #     with mp.Pool(processes=self.args["processes"]) as pool:
+    #         # calling each process pool
+    #         pool.apply(self.single_gridfs_data_stream)
 
 
 if __name__ == "__main__":
