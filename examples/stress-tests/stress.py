@@ -3,7 +3,7 @@
 # @Author: GeorgeRaven <archer>
 # @Date:   2021-04-21T00:25:06+01:00
 # @Last modified by:   archer
-# @Last modified time: 2021-04-21T22:55:20+01:00
+# @Last modified time: 2021-04-23T11:43:45+01:00
 # @License: please see LICENSE file in project root
 
 
@@ -49,7 +49,7 @@ def arg_handler(argv, description: str = None):
                         help="DB authentication using cli prompt.")
     parser.add_argument("-T", "--db-tls",
                         type=bool,
-                        default=True,
+                        default=None,
                         env_var="DB_TLS",
                         help="Is databse TLS enabled.")
     parser.add_argument("-c", "--db-tls-ca-file",
@@ -67,6 +67,11 @@ def arg_handler(argv, description: str = None):
                         default="admin",
                         env_var="DB_AUTHENTICATION_DATABASE",
                         help="Database to authenticate to.")
+    parser.add_argument("--db-authentication",
+                        type=bool,
+                        default=None,
+                        env_var="DB_AUTHENTICATION",
+                        help="whether db is using auth or not.")
     parser.add_argument("-C", "--db-collection-name",
                         type=str,
                         default="stress-test",
