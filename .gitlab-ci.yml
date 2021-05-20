@@ -1,7 +1,7 @@
 # @Author: GeorgeRaven <archer>
 # @Date:   2020-10-20T23:58:25+01:00
 # @Last modified by:   archer
-# @Last modified time: 2020-10-21T15:25:11+01:00
+# @Last modified time: 2021-05-04T23:31:57+01:00
 # @License: please see LICENSE file in project root
 
 image: docker:stable
@@ -15,13 +15,12 @@ before_script:
 build:
   only:
     - master
-    - dev
-  # before_script:
-  #   - docker login registry.gitlab.com -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
+    - staging
+  before_script:
+    - docker login registry.gitlab.com -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
   script:
-    - docker build -t "$(echo "${CI_PROJECT_ROOT_NAMESPACE}/${CI_PROJECT_NAME}:latest" | tr "[:upper:]" "[:lower:]")" -f Dockerfile .
-    # - docker build -t ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest .
-    # - docker push ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest
+    - docker build -t "$(echo ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_BRANCH} | tr "[:upper:]" "[:lower:]")" -f Dockerfile_archlinux .
+    - docker push "$(echo ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_BRANCH} | tr "[:upper:]" "[:lower:]")"
   after_script:
     - docker logout ${CI_REGISTRY}
   stage: build

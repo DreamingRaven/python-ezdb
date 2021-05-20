@@ -5,7 +5,7 @@
 # @Email:  george raven community at pm dot me
 # @Filename: ezdb.py
 # @Last modified by:   archer
-# @Last modified time: 2021-01-15T14:23:03+00:00
+# @Last modified time: 2021-05-20T11:32:43+01:00
 # @License: Please see LICENSE in project root
 
 # from __future__ import print_function, absolute_import   # python 2-3 compat
@@ -654,13 +654,19 @@ class Mongo(object):
                                 "return": list}
 
     def donate(self, other, other_collection, db_collection_name,
-               db_data_cursor=None, sum=None):
+               db_data_cursor=None,
+               sum: int = None,
+               frequency: int = None,
+               count: int = None):
         """Donate documents to another db collection.
 
         Like giving blood, we are not getting anything back to self, other
         than maybe gratification.
         """
-        count = 0
+
+        count = count if count is not None else 0
+        frequency = frequency if frequency is not None else 10
+
         docs_donated = []
         for batch in self.getBatches():
             for doc in batch:
@@ -675,7 +681,7 @@ class Mongo(object):
                         doc["_id"]))
                     self.deleteId(id=doc["_id"],
                                   db_collection_name=db_collection_name)
-                if(count % 10 == 0) and sum:
+                if(count % frequency == 0) and sum:
                     self.args["pylog"]("{}/{}".format(count, sum))
                 count = count + 1
         return docs_donated
