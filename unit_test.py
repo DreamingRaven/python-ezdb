@@ -5,7 +5,7 @@
 # @Email:  george raven community at pm dot me
 # @Filename: ezdb.py
 # @Last modified by:   archer
-# @Last modified time: 2021-01-15T14:27:19+00:00
+# @Last modified time: 2021-05-20T11:55:33+01:00
 # @License: Please see LICENSE in project root
 
 # from __future__ import print_function, absolute_import   # python 2-3 compat
@@ -63,6 +63,28 @@ class Mongo_tests(unittest.TestCase):
         db.connect()
         db.dump(db_collection_name="test", data={"success": 1})
         cursor = db.getCursor(db_collection_name="test")
+        for batch in db.getBatches(db_data_cursor=cursor):
+            self.assertEqual(len(batch), 1)
+            for doc in batch:
+                self.assertEqual(doc["success"], 1)
+
+    def test_donate(self):
+        """Test/ example of donating data to another collection."""
+        from ezdb.mongo import Mongo
+
+        db = Mongo({"pylog": null_printer})
+        self.assertIsInstance(db, Mongo)
+        db.connect()
+
+        # insert data in the donor collection
+        db.dump(db_collection_name="donor", data={"success": 1})
+
+        # donate data
+        db.getCursor(db_collection_name="rec")
+        db.donate(other=db, other_collection="rec", db_collection_name="donor")
+
+        # check donated data is correct
+        cursor = db.getCursor(db_collection_name="rec")
         for batch in db.getBatches(db_data_cursor=cursor):
             self.assertEqual(len(batch), 1)
             for doc in batch:
