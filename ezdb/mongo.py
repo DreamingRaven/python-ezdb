@@ -60,6 +60,7 @@ class Mongo(object):
             "db_log_path": "db" + "/log",
             "db_log_name": "mongoLog",
             "db_cursor_timeout": 600000,
+            "db_server_selection_timeout": 30000,  # in mili seconds
             "db_batch_size": 32,
             "pylog": logger if logger is not None else print,
             "db": None,
@@ -153,15 +154,23 @@ class Mongo(object):
                             "db_log_name": str, "db_config_path": str,
                             "return": None}
 
-    def connect(self, db_ip=None, db_port=None, db_authentication=None,
+    def connect(self, db_ip=None,
+                db_port=None,
+                db_authentication=None,
                 db_authentication_database=None,
-                db_user_name=None, db_password=None, db_name=None,
-                db_replica_set_name=None, db_replica_read_preference=None,
-                db_replica_max_staleness=None, db_tls=None,
-                db_tls_ca_file=None, db_tls_certificate_key_file=None,
+                db_user_name=None,
+                db_password=None,
+                db_name=None,
+                db_replica_set_name=None,
+                db_replica_read_preference=None,
+                db_replica_max_staleness=None,
+                db_tls=None,
+                db_tls_ca_file=None,
+                db_tls_certificate_key_file=None,
                 db_tls_certificate_key_file_password=None,
                 db_tls_crl_file=None,
-                db_collection_name=None):
+                db_collection_name=None,
+                db_server_selection_timeout=None):
         """Connect to a specific mongodb database.
 
         This sets the internal db client which is neccessary to connect to
@@ -253,8 +262,13 @@ class Mongo(object):
         db_collection_name = db_collection_name if db_collection_name is not \
             None else self.args["db_collection_name"]
 
+        db_server_selection_timeout = db_server_selection_timeout if \
+            db_server_selection_timeout is not None else self.args[
+                "db_server_selection_timeout"]
+
         client_args = {}
         client_args["host"] = ["{0}:{1}".format(str(db_ip), str(db_port))]
+        client_args["serverSelectionTimeoutMS"] = db_server_selection_timeout
 
         if (db_authentication is not None) and (db_authentication != "") and \
                 (db_authentication is not False):
