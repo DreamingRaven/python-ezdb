@@ -1,0 +1,10 @@
+{
+  "role":"rasberry-2021_gripper-rw",
+  "privileges": [
+    {"resource": {"db":"ff_rasberry", "collection":"2021_gripper"}, "actions": ["find", "insert", "remove", "update"]},
+    {"resource": {"db":"ff_rasberry", "collection":"2021_gripper.files"}, "actions": ["find", "insert", "remove", "update"]},
+    {"resource": {"db":"ff_rasberry", "collection":"2021_gripper.chunks"}, "actions": ["find", "insert", "remove", "update"]}
+  ],
+  "roles": [
+  ]
+}
