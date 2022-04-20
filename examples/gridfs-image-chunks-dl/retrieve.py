@@ -2,6 +2,7 @@
 # pip3 install git+https://github.com/DreamingRaven/python-ezdb.git#branch=master
 from ezdb.mongo import Mongo  # github.com/DreamingRavn/python-ezdb
 from datetime import datetime, tzinfo, timezone
+import logging
 import io
 import os
 import glob
