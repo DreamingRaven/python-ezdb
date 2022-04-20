@@ -51,10 +51,10 @@ db_config = {
     "db_port": 80, # most mongodb instances use 27017 by default so check which port you desire
     "db_user_name": "user",  # whatever the username is
     "db_password": "********",  # the users password
-    "db_authentication_database": "berry",  # the authenticated to coll
+    "db_authentication_database": "ff_rasberry",  # the authenticated to coll
     "db_tls": True,  # secure communication with tls
     "db_tls_ca_file": "CA.cert",  # path to tls certificate
-    "db_name": "berry",  # database to sync TO name
+    "db_name": "ff_rasberry",  # database of concern in mongodb
     "db_collection_name": str(top_level_collection_name) + ".files",  # unused as we set it explicitly in mapping
     "pylog": logging.debug,  # what logger to use
 }
